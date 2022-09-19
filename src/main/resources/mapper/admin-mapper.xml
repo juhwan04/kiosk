@@ -24,5 +24,21 @@
 			)
 			
 	</insert>
+	<select id="selectMenuList" resultType="edu.sungil.foods.web.domain.dto.MenuInfo" parameterType="edu.sungil.foods.web.domain.dto.SchMenuInfo">
+		select menu_no,
+			menu_nm,
+			menu_prc,
+			menu_desc,
+			menu_stock_qty,
+			disp_yn
+		from tb_menu
+		where 1=1
+		<if test="menuNo != '' and menuNo != null">
+			and menu_no = #{menuNo}
+		</if>
+		<if test="menuNm != '' and menuNm != null">
+			and menu_nm like concat('%', #{menuNm}, '%')
+		</if>
+	</select>
    
 </mapper>

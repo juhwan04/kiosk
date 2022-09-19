@@ -14,36 +14,6 @@
 
 <!-- Title Page-->
 <title>관리페이지</title>
-<script type="text/javascript">
-	function showPopup(prdNo) {
-		alert(prdNo);
-	}
-	function btnSave(){
-		event.preventDefault();
-		alert("저장하시겠습니까?");
-		var form = $('#frmMenu')[0];
-		var data = new FormData(form);
-		
-		$.ajax({
-			url : '/admin/menu/add',
-			data : data,
-			method : 'post',
-			enctype : 'multipart/form-data',
-			contentType : false,
-			processData : false,
-			
-			success : function(data){
-				alert("성공");
-			},
-			error : function(data){
-				alert("에러");
-			},
-			complete : function(data){
-				console.log(data.responseText);
-			}
-		})
-	}
-</script>
 
 </head>
 
@@ -103,13 +73,13 @@
 										data-toggle="modal" data-target="#largeModal">
 										<i class="zmdi zmdi-plus"></i>메뉴 추가
 									</button>
-									<button class="au-btn au-btn-icon au-btn--green au-btn--small">
+									<button id="btnSearch"class="au-btn au-btn-icon au-btn--green au-btn--small">
 										<i class="fa  fa-search"></i>검색
 									</button>
 								</div>
 							</div>
 							<div class="table-responsive table-responsive-data2">
-								<table class="table table-data2">
+								<table id="tblMenu" class="table table-data2">
 									<thead>
 										<tr>
 											<th>메뉴번호</th>
@@ -155,7 +125,7 @@
 						</div>
 						<div class="modal-body">
 							<div class="card-body card-block">
-								<form id="frmMenu" class="form-horizontal">
+								<form id="frmMenu" name="data" class="form-horizontal">
 									<div class="row form-group">
 										<div class="col col-md-3">
 											<label class=" form-control-label">메뉴번호</label>
@@ -239,5 +209,69 @@
 
 			<%@ include file="/WEB-INF/jsp/admin/include/footer.jsp"%>
 		</div>
+		<script type="text/javascript">
+	function showPopup(prdNo) {
+		alert(prdNo);
+	}
+	function btnSave(){
+		event.preventDefault();
+		
+		if(!menuAlert()){
+			return;
+		}
+		
+		alert("저장하시겠습니까?");
+		var form = $('#frmMenu')[0];
+		var data = new FormData(form);
+		
+		$.ajax({
+			url : '/admin/menu/add',
+			data : data,
+			method : 'post',
+			enctype : 'multipart/form-data',
+			contentType : false,
+			processData : false,
+			
+			success : function(data){
+				alert("성공");
+			},
+			error : function(data){
+				alert("에러");
+			},
+			complete : function(data){
+				console.log(data.responseText);
+			}
+		})
+	}
+	
+	function menuAlert(){
+		if(!data.menuNm.value){
+			alert("메뉴명을 입력해주세요");
+			data.menuNm.focus();
+			return false;
+		}
+		if(!data.menuPrc.value){
+			alert("단가를 입력해주세요");
+			data.menuPrc.focus();
+			return false;
+		}
+		if(!data.menuStockQty.value){
+			alert("재고를 입력해주세요");
+			data.menuStockQty.focus();
+			return false;
+		}
+		if(!data.menuImgNm.value){
+			alert("이미지를 선택해주세요");
+			return false;
+		}
+		return true;
+	}
+	
+	$("#btnSearch").click(function(){
+		event.preventDefault();
+		alert("검색하시겠습니까?");
+	})
+</script>
+		
 </body> 
 </html>
